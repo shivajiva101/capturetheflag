@@ -80,7 +80,7 @@ function ctf_stats.load()
 
 	-- Strip players which have no score
 	for name, player_stats in pairs(ctf_stats.players) do
-		if not player_stats.score or player_stats.score <= 0 then
+		if not player_stats.score or player_stats.score <= 500 then
 			ctf_stats.players[name] = nil
 			ctf.needs_save = true
 		else

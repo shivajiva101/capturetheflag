@@ -278,55 +278,31 @@ local function return_as_chat_result(to, name)
 	return true, result
 end
 
+local function show_update_menu(name)
+	minetest.show_formspec(name, "ctf_stats:upgrade", "size[6,3]" ..
+		default.gui_bg_img .. default.gui_bg ..
+	 	"label[0,0;" ..
+		minetest.formspec_escape("Please upgrade to Minetest 5.0, for cool new features") .. "]label[0,0.5;" ..
+		minetest.formspec_escape("including slippery ice and an in-menu content installer.") .. "]label[0,1.33;" ..
+		minetest.formspec_escape("Simply download from minetest.net or search for Minetest on the play store") .. "]button_exit[2,2.2;2,1;;OK]")
+end
+
+minetest.register_on_joinplayer(function(player)
+	show_update_menu(player:get_player_name())
+end)
+
 minetest.register_chatcommand("r", {
 	params = "[<name>]",
 	description = "Display rankings of yourself or another player as a chat result.",
 	func = function(name, param)
-		local target
-		if param ~= "" then
-			param = param:trim()
-			if ctf_stats.players[param] then
-				target = param
-			else
-				return false, "Can't find player '" .. param .. "'"
-			end
-		else
-			target = name
-		end
-		return return_as_chat_result(name, target)
+		return true, "Please upgrade Minetest to 5.0 and join the main server"
 	end
 })
 
 minetest.register_chatcommand("rankings", {
 	params = "[<name>]",
 	description = "Display rankings of yourself or another player.",
-	func = function(name, param)
-		local target
-		if param ~= "" then
-			param = param:trim()
-			if ctf_stats.players[param] then
-				target = param
-			else
-				return false, "Can't find player '" .. param .. "'"
-			end
-		else
-			target = name
-		end
-
-		if not minetest.get_player_by_name(name) then
-			return return_as_chat_result(name, target)
-		else
-			local players = {}
-			for pname, pstat in pairs(ctf_stats.players) do
-				pstat.name = pname
-				pstat.color = nil
-				table.insert(players, pstat)
-			end
-
-			local fs = ctf_stats.get_formspec("Player Rankings", players, 0, target)
-			minetest.show_formspec(name, "ctf_stats:rankings", fs)
-		end
-	end
+	func = show_update_menu
 })
 
 local reset_y = {}
