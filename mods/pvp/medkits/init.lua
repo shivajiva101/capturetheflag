@@ -54,7 +54,7 @@ local function stop_healing(player, interrupted)
 	players[name] = nil
 	if interrupted then
 		minetest.chat_send_player(name, minetest.colorize("#FF4444",
-		                                "Your healing was interrupted!"))
+				"Your healing was interrupted!"))
 		player:set_hp(info.hp)
 		player:get_inventory():add_item("main", ItemStack("medkits:medkit 1"))
 	end
@@ -74,7 +74,7 @@ ctf_flag.register_on_precapture(function()
 	return true
 end)
 
--- Called after left-click every n seconds (determined by hpregen.interval)
+-- Called after left-click every n seconds (determined by regen_interval)
 -- heals player for a total of regen_max, limited by player's max hp
 minetest.register_globalstep(function(dtime)
 	regen_timer = regen_timer + dtime
