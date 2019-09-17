@@ -19,7 +19,7 @@ ctf_classes.register("knight", {
 
 ctf_classes.register("shooter", {
 	description = "Shooter",
-	pros = { "+10% ranged skill", "Rifles and grapling hooks" },
+	pros = { "+10% ranged skill", "Rifles and grappling hooks" },
 	cons = { "Can't capture the flag" },
 	can_capture = false,
 	color = "#c60",
