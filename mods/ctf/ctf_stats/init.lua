@@ -386,7 +386,12 @@ ctf.register_on_killedplayer(function(victim, killer)
 	end
 	local main, match = ctf_stats.player(killer)
 	if main and match then
-		local reward = calculateKillReward(victim, killer)
+		local reward
+		if stack and stack:get_name() == "ctf_traps:spike" then
+			reward = 50 -- fixed reward
+		else
+			reward = calculateKillReward(victim, killer)
+		end
 		main.kills  = main.kills  + 1
 		main.score  = main.score  + reward
 		match.kills = match.kills + 1
@@ -411,6 +416,16 @@ minetest.register_on_dieplayer(function(player)
 		match.deaths = match.deaths + 1
 		match.kills_since_death = 0
 		_needs_save = true
+	end
+		-- check for trap death
+	if reason.node:get_name():sub(1,9) == "ctf_traps" then
+		local pname = player:get_player_name()
+		local pos = minetest.find_node_near(player:get_pos(), 2, reason.node, true)
+		local hname = minetest.get_meta(pos):get_string("placer")
+		-- iterating the registered_on_killedplayer function table supplying params
+		for i = 1, #ctf.registered_on_killedplayer do
+			ctf.registered_on_killedplayer[i](pname, hname, ItemStack(reason.node))
+		end
 	end
 end)
 
