@@ -36,6 +36,10 @@ minetest.register_node("ctf_traps:spike", {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, 0, 0.5},
 	},
+	after_place_node = function(pos, placer, itemstack, pointed_thing)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("placer", placer:get_player_name())
+	end
 })
 
 minetest.register_node("ctf_traps:damage_cobble", {
@@ -52,7 +56,7 @@ minetest.register_node("ctf_traps:damage_cobble", {
 
 		local digger_team = ctf.player(name).team
 		local meta = minetest.get_meta(pos)
-		local placer_team = meta:get_string("placer") or "missing"
+		local placer_team = meta:get_string("team") or "missing"
 		if digger_team ~= placer_team then
 			local hp = digger:get_hp()
 			digger:set_hp(hp - 7)
@@ -60,12 +64,12 @@ minetest.register_node("ctf_traps:damage_cobble", {
 			return
 		end
 
-		meta:set_string("placer", "")
+		meta:set_string("team", "") -- isnt this action removed by the next function?
 		return minetest.node_dig(pos, node, digger)
 	end,
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
 		local name = placer:get_player_name()
-		meta:set_string("placer", ctf.player(name).team)
+		meta:set_string("team", ctf.player(name).team)
 	end
 })
