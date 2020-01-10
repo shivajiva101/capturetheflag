@@ -379,7 +379,7 @@ local function calculateKillReward(victim, killer)
 	return reward
 end
 
-ctf.register_on_killedplayer(function(victim, killer)
+ctf.register_on_killedplayer(function(victim, killer, stack)
 	-- Suicide is not encouraged here at CTF
 	if victim == killer then
 		return
