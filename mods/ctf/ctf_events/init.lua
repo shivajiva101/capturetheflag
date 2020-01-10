@@ -129,6 +129,8 @@ ctf.register_on_killedplayer(function(victim, killer, stack, tool_caps)
 		end
 	elseif sname:sub(1, 8) == "shooter:" then
 		type = "bullet"
+	elseif sname:sub(1, 10) == "ctf_traps:" then
+		type = "trap"
 	end
 
 	ctf_events.post("kill_" .. type, killer, victim)
